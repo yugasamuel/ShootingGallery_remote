@@ -10,6 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var scoreLabel: SKLabelNode!
+    var timerLabel: SKLabelNode!
     var rifle: SKSpriteNode!
     var crosshair: SKSpriteNode!
     
@@ -21,23 +22,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var timer = 0 {
+        didSet {
+            timerLabel.text = "Time Left: \(timer)"
+        }
+    }
+    
     let possibleDucks = ["duck_outline_brown", "duck_outline_white", "duck_outline_yellow"]
     
     override func didMove(to view: SKView) {
-        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
         
         scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
-        scoreLabel.position = CGPoint(x: 512, y: 530)
+        scoreLabel.position = CGPoint(x: 512, y: 555)
         scoreLabel.horizontalAlignmentMode = .center
         scoreLabel.fontSize = 52
         scoreLabel.zPosition = 1
         addChild(scoreLabel)
+        
+        timerLabel = SKLabelNode(fontNamed: "Chalkduster")
+        timerLabel.position = CGPoint(x: 512, y: 500)
+        timerLabel.horizontalAlignmentMode = .center
+        timerLabel.fontSize = 24
+        timerLabel.zPosition = 1
+        addChild(timerLabel)
         
         rifle = SKSpriteNode(imageNamed: "rifle")
         rifle.position = CGPoint(x: 840, y: 100)
         addChild(rifle)
         
         score = 0
+        timer = 60
         
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
@@ -85,17 +100,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.xScale = xScale
         sprite.name = name
         sprite.physicsBody?.velocity = velocity
-
+        
+        timer-=1
+        
         addChild(sprite)
-    }
-    
-    override var isUserInteractionEnabled: Bool {
-        get {
-            return true
-        }
-        set {
-            // ignore
-        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -117,10 +125,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         crosshair.position = location
         addChild(crosshair)
         
-        let delay = SKAction.wait(forDuration: 0.2)
-        let fade = SKAction.fadeOut(withDuration: 0.3)
+        let fade = SKAction.fadeOut(withDuration: 0.5)
         let remove = SKAction.removeFromParent()
-        crosshair.run(SKAction.sequence([delay, fade, remove]))
+        crosshair.run(SKAction.sequence([fade, remove]))
         
         run(SKAction.playSoundFileNamed("gunshot.mp3", waitForCompletion: false))
     }
