@@ -127,6 +127,7 @@
 		659ED11C2ABF275F00002BBD /* text_0_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED0AE2ABF275F00002BBD /* text_0_small.png */; };
 		659ED11E2AC02C6700002BBD /* gunshot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 659ED11D2AC02C6700002BBD /* gunshot.mp3 */; };
 		659ED1202AC0976700002BBD /* gameOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED11F2AC0976700002BBD /* gameOver@2x.png */; };
+		659ED1232AC09E2E00002BBD /* FireParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 659ED1212AC09E2E00002BBD /* FireParticle.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -251,6 +252,7 @@
 		659ED0AE2ABF275F00002BBD /* text_0_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_0_small.png; sourceTree = "<group>"; };
 		659ED11D2AC02C6700002BBD /* gunshot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gunshot.mp3; sourceTree = "<group>"; };
 		659ED11F2AC0976700002BBD /* gameOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gameOver@2x.png"; sourceTree = "<group>"; };
+		659ED1212AC09E2E00002BBD /* FireParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireParticle.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +288,7 @@
 				659ED0262ABF274000002BBD /* AppDelegate.swift */,
 				659ED0282ABF274000002BBD /* GameScene.sks */,
 				659ED02A2ABF274000002BBD /* Actions.sks */,
+				659ED1212AC09E2E00002BBD /* FireParticle.sks */,
 				659ED02C2ABF274000002BBD /* GameScene.swift */,
 				659ED02E2ABF274000002BBD /* GameViewController.swift */,
 				659ED0302ABF274000002BBD /* Main.storyboard */,
@@ -578,6 +581,7 @@
 				659ED1162ABF275F00002BBD /* text_6_small.png in Resources */,
 				659ED0C82ABF275F00002BBD /* shot_yellow_large.png in Resources */,
 				659ED0D62ABF275F00002BBD /* shot_blue_small.png in Resources */,
+				659ED1232AC09E2E00002BBD /* FireParticle.sks in Resources */,
 				659ED0D82ABF275F00002BBD /* shot_blue_large.png in Resources */,
 				659ED0B72ABF275F00002BBD /* water2.png in Resources */,
 				659ED0B32ABF275F00002BBD /* curtain.png in Resources */,

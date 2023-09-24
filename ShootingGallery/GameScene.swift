@@ -16,6 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gameTimer: Timer?
     
+    var gameOverLabel: SKSpriteNode!
     var isGameOver = false
     
     var score = 0 {
@@ -33,7 +34,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let possibleDucks = ["duck_outline_target_brown", "duck_outline_target_white", "duck_outline_yellow"]
     
     override func didMove(to view: SKView) {
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
         
         scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
         scoreLabel.position = CGPoint(x: 512, y: 555)
@@ -67,7 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
 
-        if timer == 1 {
+        if timer == 55 {
             isGameOver = true
         }
     }
@@ -75,10 +76,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func createDuck() {
         if isGameOver {
             gameTimer?.invalidate()
-            let gameOver = SKSpriteNode(imageNamed: "gameOver")
-            gameOver.position = CGPoint(x: 512, y: 384)
-            gameOver.zPosition = 1
-            addChild(gameOver)
+            gameOverLabel = SKSpriteNode(imageNamed: "gameOver")
+            gameOverLabel.position = CGPoint(x: 512, y: 384)
+            gameOverLabel.zPosition = 1
+            gameOverLabel.name = "game_over_label"
+            addChild(gameOverLabel)
+            
+            for node in self.children {
+                if node.name == "duck_yellow" || node.name == "duck_brown" || node.name == "duck_white" {
+                    node.removeFromParent()
+                }
+            }
             return
         }
         
@@ -134,6 +142,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let location = touch.location(in: self)
         let touchedNodes = nodes(at: location)
         
+        if isGameOver && location == location {
+            for node in self.children {
+                if node.name == "game_over_label" {
+                    gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+                    score = 0
+                    timer = 60
+                    isGameOver = false
+                    node.removeFromParent()
+                }
+            }
+            
+        }
+        
         let node = touchedNodes.first(where: { $0.name == "duck_white" || $0.name == "duck_brown" || $0.name == "duck_yellow" })
         
         if node?.name == "duck_yellow" {
@@ -149,8 +170,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(crosshair)
         
         let fade = SKAction.fadeOut(withDuration: 0.5)
-        let remove = SKAction.removeFromParent()
+        let remove = SKAction.run { crosshair.removeFromParent() }
         crosshair.run(SKAction.sequence([fade, remove]))
+        
+        if let gunFire = SKEmitterNode(fileNamed: "FireParticle") {
+            gunFire.position = CGPoint(x: 755, y: 250)
+            addChild(gunFire)
+            
+            let fade = SKAction.fadeOut(withDuration: 0.5)
+            let remove = SKAction.run { gunFire.removeFromParent() }
+            
+            gunFire.run(SKAction.sequence([fade, remove]))
+        }
         
         run(SKAction.playSoundFileNamed("gunshot.mp3", waitForCompletion: false))
     }
