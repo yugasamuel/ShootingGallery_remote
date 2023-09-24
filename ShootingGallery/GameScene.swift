@@ -9,9 +9,12 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    var gameTimer: Timer?
     var scoreLabel: SKLabelNode!
+    var rifle: SKSpriteNode!
+    var crosshair: SKSpriteNode!
     
+    var gameTimer: Timer?
+
     var score = 0 {
         didSet {
             scoreLabel.text = "Score: \(score)"
@@ -30,10 +33,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = 1
         addChild(scoreLabel)
         
+        rifle = SKSpriteNode(imageNamed: "rifle")
+        rifle.position = CGPoint(x: 840, y: 100)
+        addChild(rifle)
+        
         score = 0
+        
+        removeBackgroundInteractions()
         
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
+    }
+    
+    func removeBackgroundInteractions() {
+        let sprite = childNode(withName: "SKSpriteNode")
+        sprite?.isUserInteractionEnabled = false
     }
     
     @objc func createDuck() {
@@ -41,6 +55,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let zPosition: CGFloat!
         let velocity: CGVector!
         let xScale: CGFloat!
+        let name: String!
         
         let row = Int.random(in: 1...3)
         if row == 1 {
@@ -62,14 +77,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         guard let duck = possibleDucks.randomElement() else { return }
         
+        if duck == "duck_outline_brown" {
+            name = "duck_brown"
+        } else if duck == "duck_outline_white" {
+            name = "duck_white"
+        } else {
+            name = "duck_yellow"
+        }
+        
         let sprite = SKSpriteNode(imageNamed: duck)
         sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         sprite.position = position
         sprite.zPosition = zPosition
         sprite.xScale = xScale
+        sprite.name = name
         sprite.physicsBody?.velocity = velocity
 
         addChild(sprite)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let touchedNode = atPoint(location)
+        
+        if touchedNode.name == "duck_yellow" {
+            score += 2
+            touchedNode.removeFromParent()
+        } else if touchedNode.name == "duck_brown" || touchedNode.name == "duck_white" {
+            score += 1
+            touchedNode.removeFromParent()
+        }
+        
+        run(SKAction.playSoundFileNamed("gunshot.mp3", waitForCompletion: false))
     }
 }
 

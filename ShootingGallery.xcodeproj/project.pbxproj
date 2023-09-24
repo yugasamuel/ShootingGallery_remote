@@ -125,6 +125,7 @@
 		659ED11A2ABF275F00002BBD /* text_cross.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED0AC2ABF275F00002BBD /* text_cross.png */; };
 		659ED11B2ABF275F00002BBD /* crosshair_white_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED0AD2ABF275F00002BBD /* crosshair_white_small.png */; };
 		659ED11C2ABF275F00002BBD /* text_0_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED0AE2ABF275F00002BBD /* text_0_small.png */; };
+		659ED11E2AC02C6700002BBD /* gunshot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 659ED11D2AC02C6700002BBD /* gunshot.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -247,6 +248,7 @@
 		659ED0AC2ABF275F00002BBD /* text_cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_cross.png; sourceTree = "<group>"; };
 		659ED0AD2ABF275F00002BBD /* crosshair_white_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crosshair_white_small.png; sourceTree = "<group>"; };
 		659ED0AE2ABF275F00002BBD /* text_0_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_0_small.png; sourceTree = "<group>"; };
+		659ED11D2AC02C6700002BBD /* gunshot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gunshot.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,6 +297,7 @@
 		659ED03D2ABF275F00002BBD /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				659ED11D2AC02C6700002BBD /* gunshot.mp3 */,
 				659ED03E2ABF275F00002BBD /* Stall */,
 				659ED04F2ABF275F00002BBD /* Objects */,
 				659ED07E2ABF275F00002BBD /* HUD */,
@@ -507,6 +510,7 @@
 				659ED0C92ABF275F00002BBD /* shot_brown_small.png in Resources */,
 				659ED0E82ABF275F00002BBD /* target_red2.png in Resources */,
 				659ED0E42ABF275F00002BBD /* target_white_outline.png in Resources */,
+				659ED11E2AC02C6700002BBD /* gunshot.mp3 in Resources */,
 				659ED0C42ABF275F00002BBD /* rifle.png in Resources */,
 				659ED0D72ABF275F00002BBD /* target_back_outline.png in Resources */,
 				659ED0B12ABF275F00002BBD /* bg_green.png in Resources */,
