@@ -39,17 +39,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         score = 0
         
-        removeBackgroundInteractions()
-        
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
     }
-    
-    func removeBackgroundInteractions() {
-        let sprite = childNode(withName: "SKSpriteNode")
-        sprite?.isUserInteractionEnabled = false
-    }
-    
+
     @objc func createDuck() {
         let position: CGPoint!
         let zPosition: CGFloat!
@@ -96,18 +89,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(sprite)
     }
     
+    override var isUserInteractionEnabled: Bool {
+        get {
+            return true
+        }
+        set {
+            // ignore
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
-        let touchedNode = atPoint(location)
+        let touchedNodes = nodes(at: location)
         
-        if touchedNode.name == "duck_yellow" {
+        let node = touchedNodes.first(where: { $0.name == "duck_white" || $0.name == "duck_brown" || $0.name == "duck_yellow" })
+        
+        if node?.name == "duck_yellow" {
             score += 2
-            touchedNode.removeFromParent()
-        } else if touchedNode.name == "duck_brown" || touchedNode.name == "duck_white" {
+            node?.removeFromParent()
+        } else if node?.name == "duck_brown" || node?.name == "duck_white" {
             score += 1
-            touchedNode.removeFromParent()
+            node?.removeFromParent()
         }
+        
+        let crosshair = SKSpriteNode(imageNamed: "crosshair_white_large")
+        crosshair.position = location
+        addChild(crosshair)
+        
+        let delay = SKAction.wait(forDuration: 0.2)
+        let fade = SKAction.fadeOut(withDuration: 0.3)
+        let remove = SKAction.removeFromParent()
+        crosshair.run(SKAction.sequence([delay, fade, remove]))
         
         run(SKAction.playSoundFileNamed("gunshot.mp3", waitForCompletion: false))
     }
