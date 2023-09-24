@@ -126,6 +126,7 @@
 		659ED11B2ABF275F00002BBD /* crosshair_white_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED0AD2ABF275F00002BBD /* crosshair_white_small.png */; };
 		659ED11C2ABF275F00002BBD /* text_0_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED0AE2ABF275F00002BBD /* text_0_small.png */; };
 		659ED11E2AC02C6700002BBD /* gunshot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 659ED11D2AC02C6700002BBD /* gunshot.mp3 */; };
+		659ED1202AC0976700002BBD /* gameOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 659ED11F2AC0976700002BBD /* gameOver@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -249,6 +250,7 @@
 		659ED0AD2ABF275F00002BBD /* crosshair_white_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crosshair_white_small.png; sourceTree = "<group>"; };
 		659ED0AE2ABF275F00002BBD /* text_0_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_0_small.png; sourceTree = "<group>"; };
 		659ED11D2AC02C6700002BBD /* gunshot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gunshot.mp3; sourceTree = "<group>"; };
+		659ED11F2AC0976700002BBD /* gameOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gameOver@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,6 +386,7 @@
 		659ED07E2ABF275F00002BBD /* HUD */ = {
 			isa = PBXGroup;
 			children = (
+				659ED11F2AC0976700002BBD /* gameOver@2x.png */,
 				659ED07F2ABF275F00002BBD /* text_8_small.png */,
 				659ED0802ABF275F00002BBD /* text_3.png */,
 				659ED0812ABF275F00002BBD /* text_2.png */,
@@ -532,6 +535,7 @@
 				659ED1012ABF275F00002BBD /* text_4_small.png in Resources */,
 				659ED0B02ABF275F00002BBD /* grass1.png in Resources */,
 				659ED0C22ABF275F00002BBD /* duck_back.png in Resources */,
+				659ED1202AC0976700002BBD /* gameOver@2x.png in Resources */,
 				659ED0EF2ABF275F00002BBD /* text_2.png in Resources */,
 				659ED0C12ABF275F00002BBD /* stick_wood.png in Resources */,
 				659ED1002ABF275F00002BBD /* icon_bullet_gold_long.png in Resources */,

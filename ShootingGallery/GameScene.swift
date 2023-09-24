@@ -15,7 +15,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var crosshair: SKSpriteNode!
     
     var gameTimer: Timer?
-
+    
+    var isGameOver = false
+    
     var score = 0 {
         didSet {
             scoreLabel.text = "Score: \(score)"
@@ -28,7 +30,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    let possibleDucks = ["duck_outline_brown", "duck_outline_white", "duck_outline_yellow"]
+    let possibleDucks = ["duck_outline_target_brown", "duck_outline_target_white", "duck_outline_yellow"]
     
     override func didMove(to view: SKView) {
         gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
@@ -57,8 +59,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
     }
+    
+    override func update(_ currentTime: TimeInterval) {
+        for node in children {
+            if node.position.x < -300 || node.position.x > 1200 {
+                node.removeFromParent()
+            }
+        }
+
+        if timer == 1 {
+            isGameOver = true
+        }
+    }
 
     @objc func createDuck() {
+        if isGameOver {
+            gameTimer?.invalidate()
+            let gameOver = SKSpriteNode(imageNamed: "gameOver")
+            gameOver.position = CGPoint(x: 512, y: 384)
+            gameOver.zPosition = 1
+            addChild(gameOver)
+            return
+        }
+        
         let position: CGPoint!
         let zPosition: CGFloat!
         let velocity: CGVector!
@@ -85,9 +108,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         guard let duck = possibleDucks.randomElement() else { return }
         
-        if duck == "duck_outline_brown" {
+        if duck == "duck_outline_target_brown" {
             name = "duck_brown"
-        } else if duck == "duck_outline_white" {
+        } else if duck == "duck_outline_target_white" {
             name = "duck_white"
         } else {
             name = "duck_yellow"
@@ -114,10 +137,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let node = touchedNodes.first(where: { $0.name == "duck_white" || $0.name == "duck_brown" || $0.name == "duck_yellow" })
         
         if node?.name == "duck_yellow" {
-            score += 2
+            score -= 5
             node?.removeFromParent()
         } else if node?.name == "duck_brown" || node?.name == "duck_white" {
-            score += 1
+            score += 2
             node?.removeFromParent()
         }
         
