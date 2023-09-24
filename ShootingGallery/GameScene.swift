@@ -10,11 +10,27 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameTimer: Timer?
+    var scoreLabel: SKLabelNode!
+    
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     
     let possibleDucks = ["duck_outline_brown", "duck_outline_white", "duck_outline_yellow"]
     
     override func didMove(to view: SKView) {
         gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+        
+        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+        scoreLabel.position = CGPoint(x: 512, y: 530)
+        scoreLabel.horizontalAlignmentMode = .center
+        scoreLabel.fontSize = 52
+        scoreLabel.zPosition = 1
+        addChild(scoreLabel)
+        
+        score = 0
         
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
@@ -54,7 +70,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.physicsBody?.velocity = velocity
 
         addChild(sprite)
-        
     }
 }
 
