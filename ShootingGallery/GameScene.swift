@@ -106,26 +106,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func createDuck() {
         let position: CGPoint!
         let zPosition: CGFloat!
-        let velocity: CGVector!
         let xScale: CGFloat!
-        let name: String!
+        let yScale: CGFloat!
+        var velocity: CGVector!
+        var name: String!
         
         let row = Int.random(in: 1...3)
         if row == 1 {
-            position = CGPoint(x: -75, y: 200)
+            position = CGPoint(x: -75, y: 195)
             velocity = CGVector(dx: 300, dy: 0)
             zPosition = -4
-            xScale = 1
         } else if row == 2 {
             position = CGPoint(x: 1099, y: 325)
             velocity = CGVector(dx: -300, dy: 0)
             zPosition = -6
-            xScale = -1
         } else {
             position = CGPoint(x: -75, y: 450)
             velocity = CGVector(dx: 300, dy: 0)
             zPosition = -8
-            xScale = 1
+        }
+        
+        let size = Int.random(in: 1...5)
+        if size == 1 {
+            if row == 2 {
+                xScale = -0.7
+                velocity.dx -= 85
+            } else {
+                xScale = 0.7
+                velocity.dx += 85
+            }
+            yScale = 0.7
+        } else {
+            if row == 2 {
+                xScale = -1
+            } else {
+                xScale = 1
+            }
+            yScale = 1
         }
         
         guard let duck = possibleDucks.randomElement() else { return }
@@ -138,11 +155,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             name = "duck_yellow"
         }
         
+        if size == 1 {
+            name += "_small"
+        }
+        
         let sprite = SKSpriteNode(imageNamed: duck)
         sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         sprite.position = position
         sprite.zPosition = zPosition
         sprite.xScale = xScale
+        sprite.yScale = yScale
         sprite.name = name
         sprite.physicsBody?.velocity = velocity
         sprite.physicsBody?.categoryBitMask = 0
@@ -170,15 +192,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
         } else {
-            let node = touchedNodes.first(where: { $0.name == "duck_white" || $0.name == "duck_brown" || $0.name == "duck_yellow" })
+            let node = touchedNodes.first(where: { $0.name == "duck_white" || $0.name == "duck_brown" || $0.name == "duck_yellow" || $0.name == "duck_white_small" || $0.name == "duck_brown_small" || $0.name == "duck_yellow_small" })
             
-            if node?.name == "duck_yellow" {
+            if node?.name == "duck_yellow" || node?.name == "duck_yellow_small" {
                 score -= 5
-                node?.removeFromParent()
             } else if node?.name == "duck_brown" || node?.name == "duck_white" {
+                score += 1
+            } else if node?.name == "duck_brown_small" || node?.name == "duck_white_small" {
                 score += 2
-                node?.removeFromParent()
             }
+            
+            node?.removeFromParent()
             
             let crosshair = SKSpriteNode(imageNamed: "crosshair_white_large")
             crosshair.position = location
