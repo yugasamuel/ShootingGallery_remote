@@ -172,6 +172,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnTime *= 0.991
         
         addChild(sprite)
+        
+        let moveUp = SKAction.move(by: CGVector(dx: 0, dy: 35), duration: 0.5)
+        let sequence = SKAction.sequence([moveUp, moveUp.reversed()])
+        sprite.run(SKAction.repeatForever(sequence))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
