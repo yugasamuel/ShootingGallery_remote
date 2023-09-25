@@ -56,7 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         countdownLabel.position = CGPoint(x: 512, y: 500)
         countdownLabel.horizontalAlignmentMode = .center
         countdownLabel.fontSize = 24
-        countdownLabel.zPosition = 1
+        countdownLabel.zPosition = -9
         addChild(countdownLabel)
         
         rifle = SKSpriteNode(imageNamed: "rifle")
@@ -145,8 +145,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.xScale = xScale
         sprite.name = name
         sprite.physicsBody?.velocity = velocity
+        sprite.physicsBody?.categoryBitMask = 0
         
-        spawnTime *= 0.995
+        spawnTime *= 0.991
         
         addChild(sprite)
     }
