@@ -10,11 +10,12 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var scoreLabel: SKLabelNode!
-    var timerLabel: SKLabelNode!
+    var countdownLabel: SKLabelNode!
     var rifle: SKSpriteNode!
     var crosshair: SKSpriteNode!
     
-    var gameTimer: Timer?
+    var duckTimer: Timer?
+    var countdownTimer: Timer?
     
     var gameOverLabel: SKSpriteNode!
     var isGameOver = false
@@ -25,16 +26,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    var timer = 0 {
+    var countdownTime = 0 {
         didSet {
-            timerLabel.text = "Time Left: \(timer)"
+            countdownLabel.text = "Time Left: \(countdownTime)"
+        }
+    }
+    
+    var spawnTime = 1.0 {
+        didSet {
+            duckTimer?.invalidate()
+            duckTimer = Timer.scheduledTimer(timeInterval: spawnTime, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
         }
     }
     
     let possibleDucks = ["duck_outline_target_brown", "duck_outline_target_white", "duck_outline_yellow"]
     
     override func didMove(to view: SKView) {
-        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+        countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(depleteTime), userInfo: nil, repeats: true)
+        duckTimer = Timer.scheduledTimer(timeInterval: spawnTime, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
         
         scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
         scoreLabel.position = CGPoint(x: 512, y: 555)
@@ -43,19 +52,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = 1
         addChild(scoreLabel)
         
-        timerLabel = SKLabelNode(fontNamed: "Chalkduster")
-        timerLabel.position = CGPoint(x: 512, y: 500)
-        timerLabel.horizontalAlignmentMode = .center
-        timerLabel.fontSize = 24
-        timerLabel.zPosition = 1
-        addChild(timerLabel)
+        countdownLabel = SKLabelNode(fontNamed: "Chalkduster")
+        countdownLabel.position = CGPoint(x: 512, y: 500)
+        countdownLabel.horizontalAlignmentMode = .center
+        countdownLabel.fontSize = 24
+        countdownLabel.zPosition = 1
+        addChild(countdownLabel)
         
         rifle = SKSpriteNode(imageNamed: "rifle")
         rifle.position = CGPoint(x: 840, y: 100)
         addChild(rifle)
         
         score = 0
-        timer = 5
+        countdownTime = 60
         
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
@@ -68,30 +77,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
 
-        if timer == 1 {
+        if countdownTime == 1 {
             isGameOver = true
         }
     }
-
-    @objc func createDuck() {
+    
+    @objc func depleteTime() {
+        countdownTime-=1
         if isGameOver {
-            gameTimer?.invalidate()
+            duckTimer?.invalidate()
+            countdownTimer?.invalidate()
             gameOverLabel = SKSpriteNode(imageNamed: "gameOver")
             gameOverLabel.position = CGPoint(x: 512, y: 384)
             gameOverLabel.zPosition = 1
             gameOverLabel.name = "game_over_label"
             addChild(gameOverLabel)
             
-            timerLabel.text = "Tap any where to play again"
+            countdownLabel.text = "Tap any where to play again"
             
             for node in self.children {
                 if node.name == "duck_yellow" || node.name == "duck_brown" || node.name == "duck_white" {
                     node.removeFromParent()
                 }
             }
-            return
         }
-        
+    }
+
+    @objc func createDuck() {
         let position: CGPoint!
         let zPosition: CGFloat!
         let velocity: CGVector!
@@ -134,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.name = name
         sprite.physicsBody?.velocity = velocity
         
-        timer-=1
+        spawnTime *= 0.995
         
         addChild(sprite)
     }
@@ -147,9 +159,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if isGameOver && location == location {
             for node in self.children {
                 if node.name == "game_over_label" {
-                    gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+                    duckTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createDuck), userInfo: nil, repeats: true)
+                    countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(depleteTime), userInfo: nil, repeats: true)
                     score = 0
-                    timer = 60
+                    countdownTime = 60
                     isGameOver = false
                     node.removeFromParent()
                 }
@@ -186,8 +199,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             run(SKAction.playSoundFileNamed("gunshot.mp3", waitForCompletion: false))
         }
-        
-        
     }
 }
 
