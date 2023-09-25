@@ -96,7 +96,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             countdownLabel.text = "Tap any where to play again"
             
             for node in self.children {
-                if node.name == "duck_yellow" || node.name == "duck_brown" || node.name == "duck_white" {
+                if node.name == "duck_yellow" || node.name == "duck_brown" || node.name == "duck_white" || node.name == "duck_yellow_small" || node.name == "duck_brown_small" || node.name == "duck_white_small" {
                     node.removeFromParent()
                 }
             }
@@ -206,15 +206,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 score += 2
             }
             
-            node?.removeFromParent()
+            node?.removeAllActions()
+            node?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+            let fade = SKAction.fadeOut(withDuration: 0.5)
+            let removeDuck = SKAction.run { node?.removeFromParent() }
+            node?.run(SKAction.sequence([fade, removeDuck]))
             
             let crosshair = SKSpriteNode(imageNamed: "crosshair_white_large")
             crosshair.position = location
             addChild(crosshair)
             
-            let fade = SKAction.fadeOut(withDuration: 0.5)
-            let remove = SKAction.run { crosshair.removeFromParent() }
-            crosshair.run(SKAction.sequence([fade, remove]))
+            let removeCrosshair = SKAction.run { crosshair.removeFromParent() }
+            crosshair.run(SKAction.sequence([fade, removeCrosshair]))
             
             if let gunFire = SKEmitterNode(fileNamed: "FireParticle") {
                 gunFire.position = CGPoint(x: 755, y: 250)
